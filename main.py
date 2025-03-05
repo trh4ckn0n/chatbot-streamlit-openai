@@ -9,18 +9,18 @@ from streamlit_chat import message
 openai.api_key = st.secrets["OPEN_API_KEY"]
 
 # Generating responses from the api
-
 def generate_response(prompt):
-    completions = openai.Completion.create(
-        engine = "text-davinci-003",
-        prompt = prompt,
-        max_tokens = 1024,
-        n=1,
-        stop=None,
+    completions = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",  # ou "gpt-4"
+        messages=[
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": prompt}
+        ],
+        max_tokens=1024,
         temperature=0.5
     )
-    messages = completions.choices[0].text
-    return messages
+    response = completions.choices[0].message['content']
+    return response
 
 # Creating the chatbot interfaces
 
